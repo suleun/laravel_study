@@ -1,0 +1,1 @@
+<x-posts-list : posts="$posts" />
