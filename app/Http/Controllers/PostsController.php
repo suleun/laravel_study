@@ -41,8 +41,17 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
-        Post::create([$request->all(), Auth::user()->id]);
 
+        $this->validate($request, ['title'=>'required', 'content'=>'required|min:3']);
+
+        $input = array_merge($request->all(),
+        ["user_id"=>Auth::user()->id]);
+
+
+        Post::create($input);
+
+        // return view('bbs.index', ['posts'=>Post::all()]);
+        return redirect()->route('post.index');
     }
 
     /**

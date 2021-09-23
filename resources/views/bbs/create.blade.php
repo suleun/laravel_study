@@ -2,7 +2,7 @@
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-800 leading-tight">
             {{ __('글쓰기 폼') }}
-            <button onclick="location.href="{{ route('posts.index') }}"">
+            <button onclick="location.href=" {{ route('posts.index') }} "">
                 목록보기
             </button>
         </x-slot>
@@ -17,28 +17,39 @@
                         name="title"
                         class="form-control"
                         id="title"
-                        placeholder="제목을 입력하세요">
+                        placeholder="제목을 입력하세요"
+                        value="{{ old('title') }}">
+                        @error('title')
+                        <div class="text-red-800">
+                            <span>
+                                {{ $message }}
+                            </span>
+                        </div>
+                        @enderror
+                    </div>
+
+                    <div class="col-12 m-2">
+                        <label for="content" class="form-label">글 내용</label>
+                        <textarea class="form-control" name="content" id="content"></textarea>
+                        @error('content')
+                        <div class="text-red-800">
+                            {{ old('content') }}
+                            >
+                            <span>
+                                {{ $message }}
+                            </span>
+                        </div>
+                        @enderror
+
+                    </div>
+
+                    <div class="col-12 m-2">
+                        <label for="image">첨부이미지</label>
+                        <input type="file" name="image" class="form-control" id="image"></div>
+
+                        <button type="submit" class="btn btn-primary">저장</button>
+                    </form>
+
                 </div>
 
-                <div class="col-12 m-2">
-                    <label for="content" class="form-label">글 내용</label>
-                    <textarea class="form-control" name="content" id="content"></textarea>
-                </div>
-
-                <div class="col-12 m-2">
-                    <label for="image">첨부이미지</label>
-                    <input
-                        type="file"
-                        name="image"
-                        class="form-control"
-                        id="image"
-                       >
-                </div>
-
-
-                    <button type="submit" class="btn btn-primary">저장</button>
-            </form>
-
-        </div>
-
-</x-app-layout>
+            </x-app-layout>
