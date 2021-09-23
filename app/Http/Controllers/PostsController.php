@@ -15,12 +15,21 @@ class PostsController extends Controller
      */
     public function index()
     {
-        // 메인페이지
-        // 게시글 리스트 DB에서 읽어오기
-        // 게시글 목록 만들어주는 blade에 읽어온 데이터 전달 후 실행
-        $posts = Post::all();
+        /*
+            1. 게시글 리스트를 DB에서 읽어와야지
+            2. 게시글 목록 만들어주는 blade 에 읽어온 데이터를 전달하고
+               실행. 
+        */
+        // select * from posts order by created_at desc
+        // $posts = Post::orderBy('created_at', 'desc')->get();
+
+        // $posts = Post::latest()->get();
+        // $posts = Post::oldest()->get();
+
+        $posts = Post::latest()->paginate(10);
+
         // dd($posts);
-        return view('bbs.index', ['posts' => $posts]);
+        return view('bbs.index', ['posts'=>$posts]);
     }
 
     /**
@@ -30,7 +39,8 @@ class PostsController extends Controller
      */
     public function create()
     {
-       return view('bbs.create');
+        //
+        return view('bbs.create');
     }
 
     /**
@@ -41,17 +51,56 @@ class PostsController extends Controller
      */
     public function store(Request $request)
     {
+        $this->validate($request, ['title'=>'required', 
+                        'content'=>'required|min:3']);
+        
+        $fileName = null;
+        if($request->hasFile('image')) {
+            // dd($request->file('image'));
+            $fileName = time().'_'.
+                $request->file('image')->getClientOriginalName();
+            $path = $request->file('image')  
+                ->storeAs('public/images', $fileName);
+            // dd($path);
+        }                       
+        //
+        // dd($request->all());
+        $input = array_merge($request->all(), 
+                ["user_id"=>Auth::user()->id]);
+        // 이미지가 있으면.. $input에 image 항목 추가
+        if($fileName) {
 
-        $this->validate($request, ['title'=>'required', 'content'=>'required|min:3']);
+            $input = array_merge($input, ['image' => $fileName]);
+            // dd($input);
+        }
+         /*
+            $request->all() : ['title'=>'dfakl', 'content'=>'cdkd']
+            ["user_id"=>Auth::user()->id] => ['user_id'=>1]
+        arrary_merge(['title'=>'dfakl', 'content'=>'cdkd'], 
+                            ['user_id'=>1])
 
-        $input = array_merge($request->all(),
-        ["user_id"=>Auth::user()->id]);
+         */
+        // dd($input);
+        /*
+            $input의 내용은 
+                ["title"=>"dasjfl", "content=>"cdajl", "user_id"=>1]
 
+        */
 
+        // mass assignment 
+        // Eloquent model의 white list 인 $fillable에 기술해야 한다.
         Post::create($input);
 
+        // $post = new Post;
+        // $post->title = $input['title'];
+        // $post->content = $input['content'];
+
+        // ... 
+
+        // $post->save();
+        
         // return view('bbs.index', ['posts'=>Post::all()]);
-        return redirect()->route('post.index');
+        return redirect()->route('posts.index');
     }
 
     /**
@@ -62,7 +111,14 @@ class PostsController extends Controller
      */
     public function show($id)
     {
-        //
+        // id에 해당하는 Post를 데이터베이스에서 인출
+        $post = Post::find($id);
+
+
+        // 상세보기 뷰로 전달
+        return view('bbs.show', ['post'=>$post]);
+
+
     }
 
     /**
