@@ -20,15 +20,11 @@ class PostsController extends Controller
             2. 게시글 목록 만들어주는 blade 에 읽어온 데이터를 전달하고
                실행. 
         */
-        // select * from posts order by created_at desc
-        // $posts = Post::orderBy('created_at', 'desc')->get();
-
-        // $posts = Post::latest()->get();
-        // $posts = Post::oldest()->get();
+    
 
         $posts = Post::latest()->paginate(10);
 
-        // dd($posts);
+
         return view('bbs.index', ['posts'=>$posts]);
     }
 
@@ -73,13 +69,7 @@ class PostsController extends Controller
             $input = array_merge($input, ['image' => $fileName]);
             // dd($input);
         }
-         /*
-            $request->all() : ['title'=>'dfakl', 'content'=>'cdkd']
-            ["user_id"=>Auth::user()->id] => ['user_id'=>1]
-        arrary_merge(['title'=>'dfakl', 'content'=>'cdkd'], 
-                            ['user_id'=>1])
-
-         */
+       
         // dd($input);
         /*
             $input의 내용은 
@@ -129,7 +119,10 @@ class PostsController extends Controller
      */
     public function edit($id)
     {
-        //
+        //$id에 해당하는 포스트를 수정 할 수 있는 페이지 반환
+       
+
+        return view('bbs.edit',['post'=> Post::find($id)] );
     }
 
     /**
@@ -141,7 +134,15 @@ class PostsController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, ['title'=>'required', 
+        'content'=>'required|min:3']);
+
+        $post = Post::find($id);
+        $post->title = $request->title;
+        $post->content = $request->content;
+        $post->save();
+
+
     }
 
     /**
@@ -150,8 +151,10 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        // DI(라우터 파라미터 앞에 와야 함), Dependency Injection, 의존성 주입
+       Post::find($id)->delete();
+       return redirect()->route('posts.index');
     }
 }
