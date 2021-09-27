@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
 
 class PostsController extends Controller
 {
@@ -138,9 +139,34 @@ class PostsController extends Controller
         'content'=>'required|min:3']);
 
         $post = Post::find($id);
+ 
+        // 내용 바꾸기
         $post->title = $request->title;
         $post->content = $request->content;
+
+        // 사진 내용 바꾸기
+        // $request 객체 안에 이미지가 있으면
+        // 이 이미지를 이 게시글의 이미지로 변경
+        if($request->image){
+
+            // 기존 이미지가 있다면 기존이미지를 파일 시스템에서 삭제
+            if($post->image){
+                Storage::delete('public/images/'.$post->image);
+            }
+            // 이 이미지를 이 게시글의 이미지로 파일 시스템에 저장, DB반영
+        
+            $fileName = time().'_'.
+            $request->file('image')->getClientOriginalName();
+
+            $post->image = $fileName;
+
+            $request->image->storeAS('public/images/'.$fileName);
+
+        }
+
         $post->save();
+
+        return redirect()->route('posts.show', ['post'=>$post->$id]);
 
 
     }
@@ -154,7 +180,28 @@ class PostsController extends Controller
     public function destroy(Request $request, $id)
     {
         // DI(라우터 파라미터 앞에 와야 함), Dependency Injection, 의존성 주입
-       Post::find($id)->delete();
+        
+        $post = Post::find($id)->delete();
+       // 게시글에 딸린 이미지가 있으면 파일시스템에서도 삭제 해줘야한다
+       
+       if($post->image){
+           Storage::delete('public/images/'.$post->image);
+
+       } else {
+           $post->delete();
+       }
+
        return redirect()->route('posts.index');
+
+    }
+
+    public function deleteImages($id){
+
+        $post = Post::find($id);
+        
+        Storage::delete('public/images', $post->image);
+    
+    
+
     }
 }

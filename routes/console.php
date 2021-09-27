@@ -1,6 +1,8 @@
 <?php
 
+use App\Http\Controllers\PostsController;
 use Illuminate\Foundation\Inspiring;
+use Illuminate\Routing\Route;
 use Illuminate\Support\Facades\Artisan;
 
 /*
@@ -17,3 +19,6 @@ use Illuminate\Support\Facades\Artisan;
 Artisan::command('inspire', function () {
     $this->comment(Inspiring::quote());
 })->purpose('Display an inspiring quote');
+
+Route::delete('/posts/images/{id}', [PostsController::class, "deleteImage"])
+->middleware(['auth']);
