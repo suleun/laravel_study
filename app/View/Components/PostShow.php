@@ -6,9 +6,7 @@ use Illuminate\View\Component;
 
 class PostShow extends Component
 {
-
     public $post;
-
     /**
      * Create a new component instance.
      *

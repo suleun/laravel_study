@@ -22,13 +22,10 @@ class PostFactory extends Factory
     public function definition()
     {
         return [
-            // 가짜 데이터 넣기~~
             'title' => $this->faker->word(),
             'content' => $this->faker->sentence(),
             'image' => $this->faker->imageUrl(320, 240, 'cats'),
-            'user_id' => 1,
-
-         
+            'user_id' => 1,   
         ];
     }
 }

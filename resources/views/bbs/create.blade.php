@@ -40,7 +40,7 @@
             <div class="col-12 m-2">
                 <label for="image" class="form-label">첨부 이미지</label>
                 <input type="file" name="image" class="form-control" 
-                            id="image">
+                            id="image" value="{{ old('image') }}">
             </div>    
             <div class="col-12 m-2">
             <button type="submit" class="btn btn-primary">글저장</button>
