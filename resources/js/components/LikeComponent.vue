@@ -19,8 +19,8 @@
         </svg>
 
         <svg
-                    @click="likeClicked"
-                    v-if="like==true"
+            @click="likeClicked"
+            v-if="like==true"
             aria-label="좋아요 취소"
             class="_8-yf5 "
             color="#ed4956"
@@ -44,6 +44,7 @@
 
         methods: {
             likeClicked(){
+                // 서버에 like/unlike 요청 보내기
                 this.like = !this.like;
             }
         }

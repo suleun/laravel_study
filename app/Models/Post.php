@@ -28,5 +28,9 @@ class Post extends Model
             inner join on u.id = p.writer_id
         */
     }
+    
+    public function likes(){
+        return $this->belongsToMany(User::class);
+    }
 
 }
