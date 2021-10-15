@@ -11,7 +11,8 @@ class LikesController extends Controller
     public function store(Post $post){
 
         // 있으면 없애주고 없으면 있게 해주는게 토글
-        $post->likes()->toggle(auth()->user());
+       return $post->likes()->toggle(auth()->user());
 
+       
     }
 }

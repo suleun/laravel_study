@@ -17,7 +17,8 @@
             </div>
 
             <div>
-              <like-component/>
+              <like-component :post="{{ $post }}"
+              :loginuser="{{ auth()->user()->id }}"/>
             </div>
 
             <ul class="list-group list-group-flush">
@@ -41,7 +42,16 @@
                     <button type="submit">삭제하기</button>
                 </form>
             </div>
+
         </div>
+
+        
+        <div class="card mt-2 mb-5" style="width: 100%; margin: 10px">
+            <comment-list :post="{{ $post }}"
+            :loginuser="{{ auth()->user()->id }}"
+            />
+        </div>
+
 
         <script>
             function confirmDelete(e) {
