@@ -25,7 +25,11 @@ export default {
 
     methods:{
         getComments(){
-            this.comments=['1st Comment', '2nd comment', '3rd comment', '4th comment']
+            this.comments=[
+                '1st Comment', '2nd comment', '3rd comment', '4th comment'
+            // 서버에 현재 게시글의 
+            
+            ]
         }
     }
 }

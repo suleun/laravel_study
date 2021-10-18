@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\LikesController;
 use App\Http\Controllers\PostsController;
 use Illuminate\Support\Facades\Route;
@@ -33,5 +34,19 @@ Route::get('/', function () {
 
 
 Route::post('/like/{post}', [LikesController::class, "store"])->middleware('auth')->name('like.store');
+
+// 댓글 컨트롤러 관련 메소드 라우트
+Route::delete('/comment/{post}', [CommentController::class,"index"])->middleware('auth')->name('comment.index');
+
+Route::post('/comment/{post}', [CommentController::class,"store"])->middleware('auth')->name('comment.store');
+
+Route::put('/comment/{post}', [CommentController::class,"update"])->middleware('auth')->name('comment.update');
+
+Route::delete('/comment/{post}', [CommentController::class,"destroy"])->middleware('auth')->name('comment.destroy');
+
+
+
+
+
 
 require __DIR__.'/auth.php';
