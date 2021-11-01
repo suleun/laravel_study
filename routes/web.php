@@ -36,7 +36,7 @@ Route::get('/', function () {
 Route::post('/like/{post}', [LikesController::class, "store"])->middleware('auth')->name('like.store');
 
 // 댓글 컨트롤러 관련 메소드 라우트
-Route::delete('/comment/{post}', [CommentController::class,"index"])->middleware('auth')->name('comment.index');
+Route::get('/comment/{postId}', [CommentController::class,"index"])->middleware('auth')->name('comment.index');
 
 Route::post('/comment/{postId}', [CommentController::class,"store"])->middleware('auth')->name('comment.store');
 

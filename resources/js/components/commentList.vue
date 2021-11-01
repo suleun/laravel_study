@@ -14,7 +14,7 @@
 import CommentItem from "./CommentItem.vue";
 
 export default {
-    props: ['post', 'loginuserId'],
+    props: ['post', 'loginuser'],
     data(){
         return{
             comments :[],
@@ -25,11 +25,12 @@ export default {
 
     methods:{
         getComments(){
-            this.comments=[
-                '1st Comment', '2nd comment', '3rd comment', '4th comment'
-            // 서버에 현재 게시글의 
-            
-            ]
+            axios.get('/comment/'+this.post.id).then(response=>{
+                // console.log(response);
+                this.comments = response.data;
+            }).catch(error=>{
+                console.log(error);
+            });
         }
     }
 }
