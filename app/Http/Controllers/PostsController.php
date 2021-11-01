@@ -17,7 +17,7 @@ class PostsController extends Controller
     public function index()
     {
         /*
-            1. 게시글 리스트를 DB에서 읽어와야지
+            1. 게시글 리스트를 DB에서 읽어오기
             2. 게시글 목록 만들어주는 blade 에 읽어온 데이터를 전달하고
                실행.
         */
