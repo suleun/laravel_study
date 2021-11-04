@@ -29,7 +29,7 @@ class CommentController extends Controller
     public function index($postId){ // 댓글 리스트를 가져오는 함수
         
 
-        $comments = Comment::with('user')->where('post_id', $postId)->latest()->get();
+        $comments = Comment::with('user')->where('post_id', $postId)->latest()->paginate(2);
         // SQL문 실행이 내부적으로 : select * form comments where post_id = ?
         // order by created_at desc;
 
