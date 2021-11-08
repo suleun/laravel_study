@@ -69,6 +69,8 @@ class CommentController extends Controller
     // select from comments where id = ?
     $comment = Comment::find($commentId);
 
+    $this->authorize('delete', $comment);
+
    // delete from comments where id = ?
     $comment->delete();
         return $comment;
@@ -82,6 +84,8 @@ class CommentController extends Controller
         // update할 레코드를 먼저 찾고, 그 다음 update
 
         $comment = Comment::find($commentId);
+
+        $this->authorize('update', $comment);
 
         $comment->update([
             'comment'=> $request->input('comment'),

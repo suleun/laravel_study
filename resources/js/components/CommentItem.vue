@@ -18,23 +18,19 @@
                             {{ comment.comment }}
                         </p>
 
-                        <a href="" v-if="comment.user_id==login_user_id"
->
-
+                        <button @click="deleteComment()" v-if="comment.user_id==login_user_id">
                             <small>
                                 삭제하기
                             </small>
 
-                        </a>
+                        </button>
 
-                        <a href="" v-if="comment.user_id==login_user_id"
->
-
+                        <button v-if="comment.user_id==login_user_id">
                             <small>
                                 수정하기
                             </small>
 
-                        </a>
+                        </button>
 
                     </div>
                 </div>
@@ -44,5 +40,35 @@
     </template>
 
     <script>
-        export default {props: ['comment, login_user_id']}
+        export default {
+            props: [
+                'comment', 'login_user_id'
+            ],
+            methods: {
+                deleteComment() {
+                    axios
+                        .delete('/comment/' + this.comment.id)
+                        .then(response => {
+                            console.log("삭제 되었습니다.");
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                },
+
+                updateComment() {
+                    axios
+                        .patch('/comment/' + this.comment.id)
+                        .then(response => {
+                            console.log("수정 되었습니다.");
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        });
+                }
+            
+
+        }
+
+    }
     </script>
