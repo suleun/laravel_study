@@ -18,7 +18,8 @@
         <comment-item
             v-for="(comment, index) in comments.data"
             :key="index"
-            :comment="comment"/>
+            :comment="comment"
+            :login_user_id="loginuser"/>
 
         <pagenation
             @pageClicked="getPage($event)"
@@ -37,10 +38,7 @@
             'post', 'loginuser'
         ],
         data() {
-            return {
-                comments: [],
-                newComment:'',
-            }
+            return {comments: [], newComment: ''}
         },
 
         components: {
@@ -74,23 +72,26 @@
                     });
             },
 
-            addComment(){
-                if(this.newComment == ''){
+            addComment() {
+                if (this.newComment == '') {
                     alert('내용을 적어주세요');
                     return;
                 }
 
-                axios.post('/comment/'+this.post.id, {'comment':this.newComment})
-                .then(response=>{
-                    console.log(response.data);
+                axios
+                    .post('/comment/' + this.post.id, {'comment': this.newComment})
+                    .then(response => {
+                        console.log(response.data);
 
-                    this.getComments();
-                    this.newComment='';
+                        this.getComments();
+                        this.newComment = '';
 
-                })
-                .catch(error=>{console.log(error)})
-                
-            }
+                    })
+                    .catch(error => {
+                        console.log(error)
+                    })
+
+                }
         }
     }
 </script>

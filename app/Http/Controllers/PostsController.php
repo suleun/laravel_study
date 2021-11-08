@@ -124,10 +124,22 @@ class PostsController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit(Request $request, $id)
     {
+        // 의존성 주입
+
         // $id에 해당하는 포스트를 수정할 수 있는
         // 페이지를 반환해주면 된다.
+
+        $post = Post::find($id);
+
+        // 모델을 이용해서 하는 방법
+        // if ($request->user()->cannot('update', $post)) {
+        //     abort(403);
+        // }
+
+
+        $this->authorize('update', $post);
 
         return view('bbs.edit', ['post'=>Post::find($id)]);
     }
@@ -174,6 +186,9 @@ class PostsController extends Controller
         // $post->update(['title' => $request->title,
         //             'content' => $request->content]);
 
+        
+        $this->authorize('update', $post);
+
         return redirect()->route('posts.show', ['post' => $post->id]);
     }
 
@@ -189,6 +204,9 @@ class PostsController extends Controller
         // dd($request);
         $post = Post::find($id);
 
+
+        $this->authorize('delete', $post);
+
         // 게시글에 딸린 이미지가 있으면 파일시스템에서도 삭제해줘야 한다.
         if($post->image) {
             Storage::delete('public/images/'.$post->image);
@@ -196,12 +214,16 @@ class PostsController extends Controller
 
         $post->delete();
 
+
         return redirect()->route('posts.index');
     }
 
     public function deleteImage($id) {
         $post = Post::find($id);
         // dd($post);
+
+        $this->authorize('delete', $post);
+
         Storage::delete('public/images', $post->image);
         $post->image = null;
         $post->save();

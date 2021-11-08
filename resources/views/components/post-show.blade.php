@@ -17,8 +17,7 @@
             </div>
 
             <div>
-              <like-component :post="{{ $post }}"
-              :loginuser="{{ auth()->user()->id }}"/>
+                <like-component :post="{{ $post }}" :loginuser="{{ auth()->user()->id }}"/>
             </div>
 
             <ul class="list-group list-group-flush">
@@ -30,7 +29,11 @@
                     {{ $post->writer->name }}</li>
             </ul>
             <div class="card-body flex">
+                @can('update', $post)
                 <a href="{{ route('posts.edit', ['post'=>$post->id]) }}" class="card-link">수정하기</a>
+                @endcan 
+                
+                @can('delete', $post)
                 <form
                     id="form"
                     class="ml-4"
@@ -41,17 +44,15 @@
                     {{-- <input type="hidden" name="_method" value="delete"> --}}
                     <button type="submit">삭제하기</button>
                 </form>
+
+                @endcan
             </div>
 
         </div>
 
-        
         <div class="card mt-2 mb-5" style="width: 100%; margin: 10px">
-            <comment-list :post="{{ $post }}"
-            :loginuser="{{ auth()->user()->id }}"
-            />
+            <comment-list :post="{{ $post }}" :loginuser="{{ auth()->user()->id }}"/>
         </div>
-
 
         <script>
             function confirmDelete(e) {
