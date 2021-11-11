@@ -25,11 +25,12 @@
 
                         </button>
 
-                        <button v-if="comment.user_id==login_user_id">
+                        <button
+                        @click="updateComment()" 
+                        v-if="comment.user_id==login_user_id">
                             <small>
                                 수정하기
                             </small>
-
                         </button>
 
                     </div>
@@ -46,14 +47,20 @@
             ],
             methods: {
                 deleteComment() {
-                    axios
-                        .delete('/comment/' + this.comment.id)
-                        .then(response => {
-                            console.log("삭제 되었습니다.");
-                        })
-                        .catch(error => {
-                            console.log(error);
-                        });
+                    if (confirm('Are you sure to delete?')) {
+                        axios
+                            .delete('/comment/' + this.comment.id)
+                            .then(response => {
+                                console.log("삭제 되었습니다.");
+                                this.$emit('deleted');
+                                
+                            })
+                            .catch(error => {
+                                alert('delete failed:'+error);
+                                console.log(error);
+                            });
+                    }
+
                 },
 
                 updateComment() {
@@ -66,9 +73,8 @@
                             console.log(error);
                         });
                 }
-            
+
+            }
 
         }
-
-    }
     </script>

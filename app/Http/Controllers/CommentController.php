@@ -69,6 +69,9 @@ class CommentController extends Controller
     // select from comments where id = ?
     $comment = Comment::find($commentId);
 
+    // CommentPolicy를 적용한 권한관리를 하자
+    // 즉 이요청을 한 사용자가 이 댓글을 삭제할 수 있는지 체크
+    
     $this->authorize('delete', $comment);
 
    // delete from comments where id = ?
