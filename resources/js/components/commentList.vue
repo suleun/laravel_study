@@ -20,7 +20,7 @@
             :key="index"
             :comment="comment"
             :login_user_id="loginuser"
-            @deleted="getComments()"
+            @deleted="getComments"
             />
 
         <pagenation
@@ -66,7 +66,7 @@
                 axios
                     .get('/comment/' + this.post.id)
                     .then(response => {
-                        // console.log(response);
+                        console.log(response.data);
                         this.comments = response.data;
                     })
                     .catch(error => {

@@ -29,7 +29,7 @@ class CommentController extends Controller
     public function index($postId){ // 댓글 리스트를 가져오는 함수
         
 
-        $comments = Comment::with('user')->where('post_id', $postId)->latest()->paginate(2);
+        $comments = Comment::where('post_id', $postId)->with('user')->latest()->paginate(4);
         // SQL문 실행이 내부적으로 : select * form comments where post_id = ?
         // order by created_at desc;
 
@@ -71,7 +71,7 @@ class CommentController extends Controller
 
     // CommentPolicy를 적용한 권한관리를 하자
     // 즉 이요청을 한 사용자가 이 댓글을 삭제할 수 있는지 체크
-    
+
     $this->authorize('delete', $comment);
 
    // delete from comments where id = ?
