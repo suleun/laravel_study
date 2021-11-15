@@ -16,8 +16,8 @@
         </button>
 
         <comment-item
-            v-for="(comment, index) in comments.data"
-            :key="index"
+            v-for="comment in comments.data"
+            :key="comment.id"
             :comment="comment"
             :login_user_id="loginuser"
             @deleted="getComments"

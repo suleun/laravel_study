@@ -21,75 +21,90 @@
                             v-model="newComment"
                             :readonly="!updateClicked"
                             class="text-sm"
-                            type="text" />
+                            type="text"/>
 
-                            <button v-show="updateClicked" @click="updateComment">
-                                <small>
-                                    save
-                                </small>
-                            </button>
+                        <button v-show="updateClicked" @click="updateComment">
+                            <small>
+                                save
+                            </small>
+                        </button>
 
-                            <button @click="deleteComment" v-if="comment.user_id==login_user_id">
-                                <small>
-                                    삭제하기
-                                </small>
-                            </button>
+                        <button @click="deleteComment" v-if="comment.user_id==login_user_id">
+                            <small>
+                                삭제하기
+                            </small>
+                        </button>
 
-                            <button 
-                            @click="enableUpdate" 
-                            v-if="comment.user_id==login_user_id">
-                                <small>
-                                    수정하기
-                                </small>
-                            </button>
+                        <button @click="enableUpdate" v-if="comment.user_id==login_user_id">
+                            <small>
+                                수정하기
+                            </small>
+                        </button>
 
-                        </div>
                     </div>
-
                 </div>
+
             </div>
-        </template>
+        </div>
+    </template>
 
-        <script>
-            export default {
-                props: [
-                    'comment', 'login_user_id'
-                ],
+    <script>
+        export default {
+            props: [
+                'comment', 'login_user_id'
+            ],
 
-                data() {
-                    return {newComment: '', updateClicked: false}
-                },
+            data() {
+                return {newComment: '', updateClicked: false}
+            },
 
-                created() {
-                    this.newComment = this.comment.comment;
-                },
+            created() {
+                this.newComment = this.comment.comment;
+            },
 
-                methods: {
-                    deleteComment() {
-                        if (confirm('Are you sure to delete?')) {
-                            axios
-                                .delete('/comment/' + this.comment.id)
-                                .then(response => {
-                                    console.log("삭제 되었습니다.");
-                                    this.$emit('deleted');
-                                })
-                                .catch(error => {
-                                    alert('delete failed:' + error);
-                                    console.log(error);
-                                });
-                        }
-
-                    },
-
-                    enableUpdate() {
-                        this.updateClicked = true;
-                    },
-
-                    updateComment() {
-                    },
+            methods: {
+                deleteComment() {
+                    if (confirm('Are you sure to delete?')) {
+                        axios
+                            .delete('/comment/' + this.comment.id)
+                            .then(response => {
+                                console.log("삭제 되었습니다.");
+                                this.$emit('deleted');
+                            })
+                            .catch(error => {
+                                alert('delete failed:' + error);
+                                console.log(error);
+                            });
+                    }
 
                 },
 
+                enableUpdate() {
+                    this.updateClicked = true;
+                },
 
+                updateComment() {
+
+                    if (this.newComment == '') {
+                        alert('Blank input');
+                        return; // 서버측에 요청을 막아줌.
+                    }
+                    axios
+                        .patch('/comment/' + this.comment.id, {'comment': this.newComment})
+                        .then(response => {
+                            this.updateClicked = false;
+                            Swal.fire({ // sweet alert
+                                position: 'top-center',
+                                icon: 'success',
+                                title: 'New comment updated.',
+                                showConfrimButton: false,
+                                timer: 1500
+                            })
+                        })
+                        .catch(err => {
+                            console.log(err);
+                        })
+                    }
             }
-        </script>
+        }
+    </script>

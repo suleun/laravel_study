@@ -89,7 +89,12 @@ class CommentController extends Controller
         $comment = Comment::find($commentId);
 
         $this->authorize('update', $comment);
+        // update set comment=? from xcomments where
+        // id = ?
+        // 첫 번쨰 ? : $request->input('comment)
+        // 두 번째 ? : $comment->id
 
+        
         $comment->update([
             'comment'=> $request->input('comment'),
           
